@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>date-counter</title>
+    <style>
+        body {
+            font: 16px arial;
+            --date-counter-font: verdana;
+            --date-counter-font-size: 2.5rem;
+        }
+
+        section+section {
+            margin-top: 3em;
+        }
+
+        section>*:not(h2) {
+            margin-left: 2em;
+        }
+
+        code:not(.title) {
+            margin-left: 1.5em;
+            background: lightgray;
+            padding: 0 .5em;
+        }
+        b{
+            color:darkred;
+        }
+    </style>
+    <script src="./element.js"></script>
+    <script src="https://file-size.github.io/element.js"></script>
+</head>
+
+<body>
+    <h1>&lt;date-counter></h1>
+    <a href="https://masteringionic.com/blog/creating-a-date-counter-with-stencil-web-components">inspiration</a>
+    <section id="default">
+        <h2>Count down to the default future date</h2>
+        <h2><code>&lt;date-counter>&lt;/date-counter></code></h2>
+        <date-counter></date-counter>
+    </section>
+    <section id="newyear">
+        <h2>set custom date and event attributes</h2>
+        <h2><code>&lt;date-counter noyears date="2024-1-1">🎆 New Year! 🍾&lt;/date-counter></code></h2>
+        <date-counter noyears date="2024-1-1">🎆 New Year! 🍾</date-counter>
+    </section>
+    <section id="newyeardays">
+        <h2>set custom date and event attributes</h2>
+        <h2><code>&lt;date-counter noyears nohours nominutes noseconds  date="2024-1-1" counters-font-size="6rem">🎆 New Year! 🍾&lt;/date-counter></code></h2>
+        <date-counter noyears nohours nominutes noseconds locale="nl" date="2024-1-1" counters-font-size="6rem">🎆 New Year! 🍾</date-counter>
+    </section>
+    <section id="since">
+        <h2>Count <b>up</b> from a past date</h2>
+        <h2><code>&lt;date-counter date="1969-1-21" event="my age"></code></h2>
+        <date-counter date="1969-1-21" event="my age"></date-counter>
+    </section>
+    <section id="language">
+        <h2>Set the labels to any language</h2>
+        <h2><code>&lt;date-counter locale="es">Y2K38 in Spanish&lt;date-counter></code></h2>
+        <date-counter locale="es">Y2K38 in Spanish</date-counter>
+        <h2><code>&lt;date-counter count="years,days" locale="nl">Y2K38 in Dutch&lt;date-counter></code></h2>
+        <date-counter count="years,days" locale="nl">Y2K38 in Dutch</date-counter>
+    </section>
+    <section id="CSS">
+        <h2>Styles can be set with CSS properties</h2>
+        <style>
+            #CSS {
+                --date-counter-width: 90vw;
+                --date-counter-font: Courier;
+                --date-counter-font-size: 2rem;
+                --date-counter-event-background: red;
+                --date-counter-event-color: white;
+                --date-counter-counters-background: teal;
+                --date-counter-counters-color: gold;
+                --date-counter-font-size: 3rem;
+                --date-counter-label-font-size: 1rem;
+            }
+            </style>
+        <pre>
+    --date-counter-width: 90vw;
+    --date-counter-font: Courier;
+    --date-counter-font-size: 2rem;
+    --date-counter-event-background: red;
+    --date-counter-event-color: white;
+    --date-counter-counters-background: teal;
+    --date-counter-counters-color: gold;
+    --date-counter-font-size: 3rem;
+    --date-counter-label-font-size: 1rem;
+</pre>
+<date-counter></date-counter>
+</section>
+<section id="attributes">
+    <h2>Styles can be set with attributes (they overrule CSS properties)</h2>
+    <h2><code>&lt;date-counter counters-background="blue" counters-color="gold"></code></h2>
+    <date-counter counters-background="blue" counters-color="gold"></date-counter>
+</section>
+    <section id="parts">
+        <h2>Style shadowDOM with <code>::part(...)</code></h2>
+        <img src="https://i.imgur.com/43FEtpm.png" />
+        <style>
+            #parts {
+            }
+            </style>
+        <pre>
+    </pre>
+        <date-counter></date-counter>
+    </section>
+    <section id="filesize">
+        <h2><code class="title">&lt;date-counter></code> minified GZIP Filesize is <i>small</i></h2>
+        <!-- <file-size gz src="https://date-counter.github.io/element.min.js"></file-size> -->
+    </section>
+</body>
+
+</html>
