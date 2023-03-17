@@ -1,3 +1,4 @@
+
 customElements.define("date-counter", class extends HTMLElement {
     get date() {
         return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
@@ -19,66 +20,71 @@ customElements.define("date-counter", class extends HTMLElement {
         var labels =
             // user defined:
             this.count.map(
-                label => (new Intl.RelativeTimeFormat((this.getAttribute("locale") || "en"), { numeric: 'auto' })).formatToParts(10, label)[2].value.trim()
-            );
+                label => (new Intl.RelativeTimeFormat((this.getAttribute("locale") || "en"), { numeric: 'auto' }))
+                    .formatToParts(10, label)[2].value.trim()
+            )
+        //.filter(label=>this.count.includes(label));
+
         // shorten the default years,days,hours,minutes,seconds to the number of user-defined labels
         //countlabels = countlabels.slice(-1 * (labels.length));
         var localelabels = this.count.reduce((acc, label, idx) => {
             if (countlabels.includes(label)) acc.push(labels[idx]);
             return acc;
         }, []);
-        // console.error(labels, countlabels, localelabels);
+        console.error(labels, countlabels, localelabels);
 
         // generic function to create a HTML element with all content and properties
-        var tag = ({ name = "div", id, append = [], ...props }) => {
+        var element = ({ tag = "div", id, append = [], ...props }) => {
             // every id must be unique! and becomes a this. reference
-            this[id] = Object.assign(document.createElement(name), { id, ...props });
+            this[id] = Object.assign(document.createElement(tag), { id, ...props });
             this[id].append(...append);
-            this[id].setAttribute("part", id);
+            this[id].part = id;
             return this[id];
         }
         // generic function setting CSS selector
         // to read value from attribues OR CSS property OR default value
-        var CSSprop = (prefix, name, value, // parameters
+        var attr_CSSprop = (prefix, name, value, // parameters
             // abusing parameters as variable declarations to avoid needing a function body and 'return' statement
             attr = `${prefix}-${name}`, // eg. event-background
             cssprop = `--${this.localName}-${attr}`, // eg. --date-counter-event-background
             //            l = console.log(attr, this.getAttribute(attr))
         ) => `${name}:${this.getAttribute(attr) || `var(${cssprop},${value})`};`;
 
+        // getComputedStyle(this).getPropertyValue(attr).replace(/"/g, "").trim()
+
         this.attachShadow({ mode: "open" }).append(
-            tag({
-                name: "style",
+            element({
+                tag: "style",
                 innerHTML: `:host {display:inline-block;` +
-                    CSSprop("", "font-family", "arial") +
-                    CSSprop("", "width", "", countlabels.length * 6 + "rem") +
+                    attr_CSSprop("", "font-family", "arial") +
+                    attr_CSSprop("", "width", "", countlabels.length * 6 + "rem") +
                     `}` +
                     `#event{` +
-                    CSSprop("event", "padding", "0 1rem") +
-                    CSSprop("event", "background", "gold") +
-                    CSSprop("event", "color", "black") +
-                    CSSprop("event", "text-align", "center") +
-                    CSSprop("event", "font-size", "2.5rem") +
+                    attr_CSSprop("event", "padding", "0 1rem") +
+                    attr_CSSprop("event", "background", "gold") +
+                    attr_CSSprop("event", "color", "black") +
+                    attr_CSSprop("event", "text-align", "center") +
+                    attr_CSSprop("event", "font-size", "2.5rem") +
                     `}` +
                     `#counters{display:grid;grid:1fr/repeat(${countlabels.length},1fr);` +
                     `grid-auto-flow:row;` +
-                    CSSprop("counters", "background", "green") +
-                    CSSprop("counters", "color", "white") +
-                    CSSprop("counters", "text-align", "center") +
-                    CSSprop("counters", "font-size", "2.5rem") +
+                    attr_CSSprop("counters", "background", "green") +
+                    attr_CSSprop("counters", "color", "white") +
+                    attr_CSSprop("counters", "text-align", "center") +
+                    attr_CSSprop("counters", "font-size", "2.5rem") +
                     `}` +
                     `[part*="label"]{` +
-                    CSSprop("label", "padding", "0 1rem") +
-                    CSSprop("label", "font-size", ".4em") +
+                    attr_CSSprop("label", "padding", "0 1rem") +
+                    attr_CSSprop("label", "font-size", ".4em") +
                     `}`
             }),
-            tag({ id: "event", innerHTML: `<slot>${this.eventname}</slot>` }),
-            tag({
-                id: "counters", append: countlabels.map(id => tag({
+            element({ id: "event", innerHTML: `<slot>${this.eventname}</slot>` }),
+            element({
+                id: "counters", append: countlabels.map(id => element({
                     id: id + "date",
                     append: [
-                        tag({ id, innerHTML: "0" }), // "days", "hours", "minutes", "seconds"
-                        tag({
+                        element({ id, innerHTML: "0" }), // "days", "hours", "minutes", "seconds"
+                        element({
                             id: id + "label",
                             innerHTML: (localelabels[countlabels.indexOf(id)] || "").toUpperCase()
                         })]
