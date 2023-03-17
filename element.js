@@ -115,3 +115,4 @@ customElements.define("date-counter", class extends HTMLElement {
         return timediff;
     }
 })
+
