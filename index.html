@@ -35,14 +35,23 @@
             margin-top: 5em;
         }
 
-        section>*:not(h2) {
-            margin-left: 2em;
+        h2 {
+            background: goldenrod;
+        }
+
+        html-code {
+            display: block;
+            font-size: 1.7em;
+            margin-bottom: 1em;
+        }
+
+        date-counter+html-code {
+            margin-top: 2em;
         }
 
         code:not(.title) {
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            margin: -.5em 0 0 1.5em;
             display: inline-block;
             background: lightgray;
             padding: .5em .5em;
@@ -65,10 +74,22 @@
     </style>
     <script src="./element.js"></script>
     <script src="https://file-size.github.io/element.js"></script>
-</head>
 
-<body>
-    <header>
+    <script>
+        customElements.define("header-and-footer", class extends HTMLElement {
+            connectedCallback() {
+                this.append(document.querySelector("#HEADER-AND-FOOTER").content.cloneNode(true));
+            }
+        })
+        customElements.define("html-code", class extends HTMLElement {
+            connectedCallback() {
+                setTimeout(() => {
+                    this.innerHTML = `<code>${this.innerHTML}</code>`;
+                });
+            }
+        })
+    </script>
+    <template id="HEADER-AND-FOOTER">
         <h1>&lt;date-counter> Web Component <svg viewBox="0 0 720 720">
                 <path fill="darkred"
                     d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14z" />
@@ -81,38 +102,46 @@
             less functionality and more code)</a>
         <h1>Load the &lt;date-counter> Web Component:</h1>
         <code id="loadcomponent">&lt;script src="https://date-counter.github.io/element.js">&lt;/script></code>
+        <p></p>
+        <hr>
+    </template>
+</head>
+
+<body>
+    <header>
+        <header-and-footer></header-and-footer>
     </header>
     <main>
         <h1>Use the Web Component in HTML code:</h1>
         <section id="default">
             <h2>Count down to the default future date</h2>
-            <h2><code>&lt;date-counter>&lt;/date-counter></code></h2>
+            <html-code>&lt;date-counter>&lt;/date-counter></html-code>
             <date-counter></date-counter>
         </section>
         <section id="newyear">
             <h2>set custom date and hide years counter</h2>
-            <h2><code>&lt;date-counter date="2024-1-1" noyears>🎆 New Year! 🍾&lt;/date-counter></code></h2>
+            <html-code>&lt;date-counter date="2024-1-1" noyears>🎆 New Year! 🍾&lt;/date-counter></html-code>
             <date-counter noyears date="2024-1-1">🎆 New Year! 🍾</date-counter>
         </section>
         <section id="newyeardays">
             <h2>set custom date, only display days counter and format font-size</h2>
-            <h2><code>&lt;date-counter  date="2024-1-1" count="days"<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters-font-size="6rem">🎆 New Year! 🍾&lt;/date-counter></code>
-            </h2>
+            <html-code>&lt;date-counter date="2024-1-1" count="days"<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters-font-size="6rem">🎆
+                New Year! 🍾<br>&lt;/date-counter></html-code>
             <date-counter noyears nohours nominutes noseconds date="2024-1-1" counters-font-size="6rem">🎆 New Year!
                 🍾</date-counter>
         </section>
         <section id="since">
             <h2>Count <b>up</b> from a past date</h2>
-            <h2><code>&lt;date-counter date="1969-1-21" event="my age" count="years,days,hours">&lt;date-counter></code>
-            </h2>
+            <html-code>&lt;date-counter date="1969-1-21" event="my age"
+                count="years,days,hours"><br>&lt;/date-counter></html-code>
             <date-counter date="1969-1-21" event="my age" count="years,days,hours"></date-counter>
         </section>
         <section id="language">
             <h2>Set the labels to any language</h2>
-            <h2><code>&lt;date-counter locale="es">Y2K38 in Spanish&lt;date-counter></code></h2>
+            <html-code>&lt;date-counter locale="es">Y2K38 in Spanish&lt;/date-counter></html-code>
             <date-counter locale="es">Y2K38 in Spanish</date-counter>
-            <h2><code>&lt;date-counter locale="nl" count="years,days">Y2K38 in Dutch&lt;date-counter></code></h2>
+            <html-code>&lt;date-counter locale="nl" count="years,days">Y2K38 in Dutch&lt;/date-counter></html-code>
             <date-counter count="years,days" locale="nl">Y2K38 in Dutch</date-counter>
         </section>
         <section id="CSS">
@@ -145,13 +174,17 @@
 </pre>
             <date-counter></date-counter>
         </section>
+
         <section id="attributes">
             <h2>Set styles with attributes (overrule global CSS properties)</h2>
-            <h2><code>&lt;date-counter counters-background="blue" counters-color="gold"></code></h2>
+            <html-code>&lt;date-counter counters-background="blue"
+                counters-color="gold"><br>&lt;/date-counter></html-code>
             <date-counter counters-background="blue" counters-color="gold"></date-counter>
         </section>
+
         <section id="parts">
             <h2>Style shadowDOM with <code>::part(...)</code></h2>
+            <html-code>&lt;date-counter>styled with :part&lt;/date-counter></html-code>
             <img src="https://i.imgur.com/43FEtpm.png" />
             <style>
                 #parts date-counter::part(event) {
@@ -169,26 +202,29 @@
             </style>
             <pre>
 &lt;style>
-    #parts date-counter::part(event) {
+    date-counter::part(event) {
         background: green;
         color: gold;
     }
-    #parts date-counter::part(counters) {
+    date-counter::part(counters) {
         text-shadow:  2px 2px 2px black;
     }
-    #parts date-counter::part(years) {
+    date-counter::part(years) {
         color: gold;
     }
 &lt;/style>
             </pre>
             <date-counter>styled with ::part</date-counter>
         </section>
+
         <section id="filesize">
             <h2><code class="title">&lt;date-counter></code> minified GZIP Filesize is <i>small</i></h2>
             <file-size gz src="https://date-counter.github.io/element.min.js"></file-size>
         </section>
     </main>
-    <footer></footer>
+    <footer>
+        <header-and-footer></header-and-footer>
+    </footer>
 </body>
 
 </html>
