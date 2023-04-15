@@ -6,7 +6,7 @@ customElements.define("date-counter", class extends HTMLElement {
     }
     get eventname() {
         // get event name from attribute or default Y2K38 Epochalypse name
-        return this.getAttribute("event") || "Y2K38 Epochalypse <a href='https://en.wikipedia.org/wiki/Year_2038_problem' style='text-decoration:none;font-size:40%'>wtf?</a>";
+        return this.getAttribute("event") || "Y2K38 Epochalypse <a href='//en.wikipedia.org/wiki/Y2K38' style='font-size:40%'>wtf?</a>";
     }
     connectedCallback() {
         let count = ["years", "days", "hours", "minutes", "seconds"];
@@ -77,9 +77,13 @@ customElements.define("date-counter", class extends HTMLElement {
                     attr_CSSprop("label", "font-size", ".4em") +
                     `}`
             }),
-            element({ id: "event", innerHTML: `<slot>${this.eventname}</slot>` }),
             element({
-                id: "counters", append: countlabels.map(id => element({
+                id: "event",
+                innerHTML: `<slot>${this.eventname}</slot>`
+            }),
+            element({
+                id: "counters",
+                append: countlabels.map(id => element({
                     id: id + "date",
                     append: [
                         element({ id, innerHTML: "0" }), // "days", "hours", "minutes", "seconds"

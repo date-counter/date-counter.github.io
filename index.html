@@ -53,11 +53,15 @@
             color: darkred;
             font-size: 120%;
         }
+
         svg {
-            display:inline-block;
-            width:1.5em
+            display: inline-block;
+            width: 1.5em
         }
 
+        #loadcomponent {
+            font-size: 140%;
+        }
     </style>
     <script src="./element.js"></script>
     <script src="https://file-size.github.io/element.js"></script>
@@ -66,15 +70,17 @@
 <body>
     <header>
         <h1>&lt;date-counter> Web Component <svg viewBox="0 0 720 720">
-            <path fill="darkred" d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14z"/>
-            <g fill="none" stroke="#000" >
-              <path d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14zM163 480c26 9 36 17 48 38 12 20 26 42 80 30"/>
-            </g>
-          </svg> <a href="https://github.com/date-counter/date-counter.github.io">GitHub</a></h1>
+                <path fill="darkred"
+                    d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14z" />
+                <g fill="none" stroke="#000">
+                    <path
+                        d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14zM163 480c26 9 36 17 48 38 12 20 26 42 80 30" />
+                </g>
+            </svg> <a href="https://github.com/date-counter/date-counter.github.io">GitHub</a></h1>
         <a href="https://masteringionic.com/blog/creating-a-date-counter-with-stencil-web-components">inspiration (with
             less functionality and more code)</a>
         <h1>Load the &lt;date-counter> Web Component:</h1>
-        <code>&lt;script src="https://date-counter.github.io/element.js">&lt;/script></code>
+        <code id="loadcomponent">&lt;script src="https://date-counter.github.io/element.js">&lt;/script></code>
     </header>
     <main>
         <h1>Use the Web Component in HTML code:</h1>
@@ -98,7 +104,8 @@
         </section>
         <section id="since">
             <h2>Count <b>up</b> from a past date</h2>
-            <h2><code>&lt;date-counter date="1969-1-21" event="my age" count="years,days,hours">&lt;date-counter></code></h2>
+            <h2><code>&lt;date-counter date="1969-1-21" event="my age" count="years,days,hours">&lt;date-counter></code>
+            </h2>
             <date-counter date="1969-1-21" event="my age" count="years,days,hours"></date-counter>
         </section>
         <section id="language">
