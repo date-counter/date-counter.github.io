@@ -2,28 +2,30 @@
 customElements.define("date-counter", class extends HTMLElement {
     get date() {
         // get date from attribute or default Y2K38 Epochalypse date
+        // used only once in this file; keeping it as a method so OOP derived components can override it
         return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
     }
     get eventname() {
         // get event name from attribute or default Y2K38 Epochalypse name
+        // used only once in this file; keeping it as a method so OOP derived components can override it
         return this.getAttribute("event") || "Y2K38 Epochalypse <a href=//en.wikipedia.org/wiki/Y2K38 style=font-size:40%>wtf?</a>";
     }
     connectedCallback(
     ) {
-        // naming all my variables VAR, they are slight faster and minify well because CSS has a "var" keyword too
+        // naming all my variables VAR, they are slightly faster and minify well because CSS has a "var" keyword too
         var count = ["years", "days", "hours", "minutes", "seconds"];
 
-        // set counting years,days,hours,minutes,seconds
+        // set countlabels any of years,days,hours,minutes,seconds
         var countlabels =
             // user defined "years,days"string from attribute "count" 
             this.getAttribute("count")?.split(",")
-            // or default "years,days,hours,minutes,seconds":
-            // filter away user defined "noXXXX" attributes
+            // if no "count" attribute specified, use all labels "years,days,hours,minutes,seconds"
+            // and filter away user defined "noyears" ... "noseconds" attributes
             || count.filter(label => !this.hasAttribute("no" + label));
 
         // init labels to be shown
         var locale_labels =
-            // get proper langauge names for all counting labels
+            // get proper language names for all counting labels
             count.map(
                 label => (new Intl.RelativeTimeFormat((this.getAttribute("locale") || "en"), { numeric: "auto" }))
                     .formatToParts(10, label)[2].value.trim()
