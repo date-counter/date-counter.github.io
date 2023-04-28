@@ -133,7 +133,7 @@ customElements.define("date-counter", class extends HTMLElement {
         // ----------------------------------------------------------------
         // main interval timer
         timer = setInterval(() => {
-            datedifference = this.difference(this.date);
+            datedifference = this.Interval(this.date);
             countlabels.map(label => (this["_" + label] == datedifference[label])
                 ? 0
                 : this[label].innerHTML = (this["_" + label] = datedifference[label])); // update counter
@@ -144,13 +144,14 @@ customElements.define("date-counter", class extends HTMLElement {
 
     // keeping as separate methode for easy reuse in other projects
     // could be included in this connectedCallback for a smaller file
-    difference(date, start = new Date(), future = new Date(date)) {
+    Interval(date, start = new Date(), future = new Date(date)) {
         var since = future < start && ([start, future] = [future, start]);
         var diff = future - start;
         var day = 864e5;
         var timediff = { years: ~~(diff / (day * 365)) };
         var leapYears = 0;
-        for (var i = start.getFullYear(); i < future.getFullYear(); i++)
+        var i;
+        for (i = start.getFullYear(); i < future.getFullYear(); i++)
             ((i % 4 == 0 && i % 100 != 0) || i % 400 == 0) && (since ? leapYears-- : leapYears++);
         //timediff.weeks = ~~((diff -= timediff.years * day * 7)/day);
         timediff.days = ~~((diff -= timediff.years * day * 365) / day) + leapYears;
