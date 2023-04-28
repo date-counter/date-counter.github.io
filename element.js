@@ -1,17 +1,29 @@
+// <date-counter> custom element, displaying [years] [days] [hours] [minutes] [seconds] countdown to a date
+// counts UP for past dates
+// attributes: date, event, count, noyears, nodays, nohours, nominutes, noseconds, locale
+// date:    date to count down to, default Y2K38 Epochalypse date Counts UP for past dates
+// event:   name of event, default "Y2K38 Epochalypse" OR all HTML specified in lightDOM!
+// count:   comma separated list of labels to show, default "years,days,hours,minutes,seconds"
+// noyears, nodays, nohours, nominutes, noseconds: hide labels, default show all labels
+// locale:  language to use for labels, default "en" (English)
 
 customElements.define("date-counter", class extends HTMLElement {
+
+    // ********************************************************************
+    // leaving date and eventname as Getters, although they are used once
+    // this allows OOP derived components to override them:
+    // customElements.define("my-counter") extends customElements.get("date-counter") { }
     get date() {
         // get date from attribute or default Y2K38 Epochalypse date
-        // used only once in this file; keeping it as a method so OOP derived components can override it
         return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
     }
     get eventname() {
         // get event name from attribute or default Y2K38 Epochalypse name
-        // used only once in this file; keeping it as a method so OOP derived components can override it
-        return this.getAttribute("event") || "Y2K38 Epochalypse <a href=//en.wikipedia.org/wiki/Y2K38 style=font-size:40%>wtf?</a>";
+        // if HTML is defined in lightDOM that will be used instead of this default
+        return this.getAttribute("event") || "Y2K38 Epochalypse";
     }
-    connectedCallback(
-    ) {
+    // ********************************************************************
+    connectedCallback() {
         // naming all my variables VAR, they are slightly faster and minify well because CSS has a "var" keyword too
         var count = ["years", "days", "hours", "minutes", "seconds"];
 
@@ -27,31 +39,46 @@ customElements.define("date-counter", class extends HTMLElement {
         var locale_labels =
             // get proper language names for all counting labels
             count.map(
-                label => (new Intl.RelativeTimeFormat((this.getAttribute("locale") || "en"), { numeric: "auto" }))
-                    .formatToParts(10, label)[2].value.trim()
+                label => new Intl.RelativeTimeFormat(
+                    this.getAttribute("locale") || "en",
+                    //{ numeric: "auto" }
+                ).formatToParts(10, label)[2].value.trim()
             );
 
+        // ********************************************************************
         // generic function to create a HTML element with all content and properties
-        var element = ({ tag = "div", id, append = [], ...props }) => {
+        // this[id] optimized for use in this Custom Element
+        var element = ({
+            tag = "div", // default element is a <div>
+            id,// 
+            append = [],// append array of child elements 
+            ...props // all remaing props
+        }) => (
+            // I hate "return" statements they only take up bytes (x,y,z,return value) does the job
+
             // every id must be unique! and becomes a this. reference
-            this[id] = Object.assign(document.createElement(tag), { id, ...props });
-            this[id].append(...append);
-            return this[this[id].part = id]; // merged 2 JS lines into one for shorter code
-        };
+            this[id] = Object.assign( // my favorite JS function
+                document.createElement(tag), // create a DOM element
+                { id, ...props } // set ALL properties
+            ),
+            this[id].append(...append), // append all child elements
+            this[this[id].part = id] // merged 2 JS lines into one for shorter code
+        );
+        // ********************************************************************
         // generic function setting CSS selector
         // to read value from attribues OR CSS property OR default value
-        var attr_CSSprop = (prefix, name, value, // parameters
-            // abusing parameters as variable declarations to avoid needing a function body and "return" statement
-            attr = `${prefix}-${name}`, // eg. event-background
-            cssprop = `--${this.localName}-${attr}`, // eg. --date-counter-event-background
-            //            l = console.log(attr, this.getAttribute(attr))
-        ) => `${name}:${this.getAttribute(attr) || `var(${cssprop},${value})`};`;
+        var attr_CSSprop = (prefix, name, value) =>
+            `${name}:${this.getAttribute(prefix + `-` + name) ||
+            `var(--date-counter-${prefix}-${name},${value})`};`;
 
+        // ********************************************************************
         // declare here to prevent needing let inside code below
         var timer, datedifference;
 
+        // ********************************************************************
         // create full shadowDOM
         this.attachShadow({ mode: "open" }).append(
+            // ----------------------------------------------------------------
             element({
                 tag: "style",
                 //id: "style", // prevent from setting default "undefined" string value
@@ -103,6 +130,7 @@ customElements.define("date-counter", class extends HTMLElement {
                 }))
             }))// shadowDOM created
 
+        // ----------------------------------------------------------------
         // main interval timer
         timer = setInterval(() => {
             datedifference = this.difference(this.date);
