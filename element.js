@@ -83,7 +83,7 @@ customElements.define("date-counter", class extends HTMLElement {
                 tag: "style",
                 //id: "style", // prevent from setting default "undefined" string value
                 innerHTML: `:host{display:inline-block;` +
-                    attr_CSSprop("", "font-family", "arial") +
+                    attr_CSSprop("", "font", "arial") +
                     attr_CSSprop("", "width", "", countlabels.length * 5 + "rem") +
                     `}` +
                     `#event{` +
@@ -94,7 +94,7 @@ customElements.define("date-counter", class extends HTMLElement {
                     attr_CSSprop("event", "font-size", "2.5rem") +
                     `}` +
                     `#counters{display:grid;grid:1fr/repeat(${countlabels.length},1fr);` +
-                    `grid-auto-flow:row;` +
+                    //`grid-auto-flow:row;` +
                     attr_CSSprop("counters", "background", "green") +
                     attr_CSSprop("counters", "color", "white") +
                     attr_CSSprop("counters", "text-align", "center") +
