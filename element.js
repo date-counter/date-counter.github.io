@@ -99,7 +99,10 @@ customElements.define("date-counter", class extends HTMLElement {
             // --------------------------------------------------------------------
             element({
                 id: "event",
-                innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>"
+                //innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>",
+                append: [
+                    element({ tag: "slot", innerHTML: this.getAttribute("event") || "Y2K38 Epochalypse" })
+                ]
             }),
             // --------------------------------------------------------------------
             element({
