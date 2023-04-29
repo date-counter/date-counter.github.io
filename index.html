@@ -16,12 +16,12 @@
       m126-44c-8 0-14 3-19 9a80 80 90 0135 35a25 25 90 00-16-44z
       m-50 40a5 5 90 00-10 0v39l-15 29a5 5 90 109 5l15-30a5 5 90 001-2v-40z'/>
     </svg>" />
-    <title>date-counter</title>
+    <title>date-count</title>
     <style>
         body {
             font: 16px arial;
-            --date-counter-font: verdana;
-            --date-counter-font-size: 2.5rem;
+            --date-count-font: verdana;
+            --date-count-font-size: 2.5rem;
             background: beige;
             max-width: 1200px;
             margin: 0 auto;
@@ -45,7 +45,7 @@
             margin-bottom: 1em;
         }
 
-        date-counter+html-code {
+        date-count+html-code {
             margin-top: 2em;
         }
 
@@ -94,28 +94,28 @@
         })
     </script>
     <template id="HEADER-AND-FOOTER">
-        <h1>&lt;date-counter> Web Component <svg viewBox="0 0 720 720">
+        <h1>&lt;date-count> Web Component <svg viewBox="0 0 720 720">
                 <path fill="darkred"
                     d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14z" />
                 <g fill="none" stroke="#000">
                     <path
                         d="M290 616v-78c0-26 9-43 19-52-63-7-128-32-128-140a110 110 90 0129-77c-3-7-13-36 3-75 0 0 23-7 77 30a264 264 90 01140 0c54-37 77-30 77-30 16 40 6 68 3 75a110 110 90 0129 77c0 109-66 133-128 140 10 8 19 26 19 52v78c0 8 5 17 19 14A284 284 90 00640 360 282 282 90 00360 77 284 284 90 00271 630c14 2 20-6 20-14zM163 480c26 9 36 17 48 38 12 20 26 42 80 30" />
                 </g>
-            </svg> <a href="https://github.com/date-counter/date-counter.github.io">GitHub</a></h1>
+            </svg> <a href="https://github.com/date-count/date-count.github.io">GitHub</a></h1>
         <!-- <p>
-            <a href="https://masteringionic.com/blog/creating-a-date-counter-with-stencil-web-components">inspiration
+            <a href="https://masteringionic.com/blog/creating-a-date-count-with-stencil-web-components">inspiration
                 (with
                 less functionality and more code)</a>
         </p> -->
         <p>
             I promote writing you own Web Components using native technology. <a
-                href="https://github.com/date-counter/date-counter.github.io/blob/main/element.js">The single file
-                sourcecode of this &lt;date-counter> Web Component</a> has the UNlicensed license; meaning you can copy
+                href="https://github.com/date-count/date-count.github.io/blob/main/element.js">The single file
+                sourcecode of this &lt;date-count> Web Component</a> has the UNlicensed license; meaning you can copy
             and re-use whatever you want from it, without giving any attribution.</a>
         </p>
 
-        <h1>Load the &lt;date-counter> Web Component:</h1>
-        <code id="loadcomponent">&lt;script src="https://date-counter.github.io/element.js">&lt;/script></code>
+        <h1>Load the &lt;date-count> Web Component:</h1>
+        <code id="loadcomponent">&lt;script src="https://date-count.github.io/element.js">&lt;/script></code>
         <p></p>
         <hr>
     </template>
@@ -129,116 +129,116 @@
         <h1>Use the Web Component in HTML code:</h1>
         <section id="default">
             <h2>Count down to the default future date</h2>
-            <html-code>&lt;date-counter>&lt;/date-counter></html-code>
-            <date-counter></date-counter>
+            <html-code>&lt;date-count>&lt;/date-count></html-code>
+            <date-count></date-count>
         </section>
         <section id="newyear">
             <h2>set custom date and hide years counter</h2>
-            <html-code>&lt;date-counter date="2024-1-1" noyears>🎆 New Year! 🍾&lt;/date-counter></html-code>
-            <date-counter noyears date="2024-1-1">🎆 New Year! 🍾</date-counter>
+            <html-code>&lt;date-count date="2024-1-1" noyears>🎆 New Year! 🍾&lt;/date-count></html-code>
+            <date-count noyears date="2024-1-1">🎆 New Year! 🍾</date-count>
         </section>
         <section id="newyeardays">
             <h2>set custom date, only display days counter and format font-size</h2>
-            <html-code>&lt;date-counter date="2024-1-1"<br>
+            <html-code>&lt;date-count date="2024-1-1"<br>
                 <spa-ces>14</spa-ces>count="days"<br>
                 <spa-ces>14</spa-ces>counters-font-size="6rem">🎆
-                New Year! 🍾<br>&lt;/date-counter></html-code>
-            <date-counter noyears nohours nominutes noseconds date="2024-1-1" counters-font-size="6rem">🎆 New Year!
-                🍾</date-counter>
+                New Year! 🍾<br>&lt;/date-count></html-code>
+            <date-count noyears nohours nominutes noseconds date="2024-1-1" counters-font-size="6rem">🎆 New Year!
+                🍾</date-count>
         </section>
         <section id="since">
             <h2>Count <b>up</b> from a past date</h2>
-            <html-code>&lt;date-counter date="1969-1-21"<br>
+            <html-code>&lt;date-count date="1969-1-21"<br>
                 <spa-ces>14</spa-ces>event="my age"<br>
-                <spa-ces>14</spa-ces>count="years,days,hours"><br>&lt;/date-counter></html-code>
-            <date-counter date="1969-1-21" event="my age" count="years,days,hours"></date-counter>
+                <spa-ces>14</spa-ces>count="years,days,hours"><br>&lt;/date-count></html-code>
+            <date-count date="1969-1-21" event="my age" count="years,days,hours"></date-count>
         </section>
         <section id="language">
             <h2>Set the labels to any language</h2>
-            <html-code>&lt;date-counter format="es"><br>&nbsp;Y2K38 in Spanish<br>&lt;/date-counter></html-code>
-            <date-counter format="es">Y2K38 in Spanish</date-counter>
-            <html-code>&lt;date-counter format="nl"<br>
+            <html-code>&lt;date-count format="es"><br>&nbsp;Y2K38 in Spanish<br>&lt;/date-count></html-code>
+            <date-count format="es">Y2K38 in Spanish</date-count>
+            <html-code>&lt;date-count format="nl"<br>
                 <spa-ces>14</spa-ces>count="years,days"><br>&nbsp;Y2K38
-                in Dutch<br>&lt;/date-counter></html-code>
-            <date-counter count="years,days" format="nl">Y2K38 in Dutch</date-counter>
+                in Dutch<br>&lt;/date-count></html-code>
+            <date-count count="years,days" format="nl">Y2K38 in Dutch</date-count>
         </section>
         <section id="CSS">
             <h2>Set styles with CSS properties</h2>
             <style>
                 #CSS {
-                    --date-counter-width: 90vw;
-                    --date-counter-font: Courier;
-                    --date-counter-font-size: 2rem;
-                    --date-counter-event-background: red;
-                    --date-counter-event-color: white;
-                    --date-counter-counters-background: teal;
-                    --date-counter-counters-color: gold;
-                    --date-counter-font-size: 3rem;
-                    --date-counter-label-font-size: 1rem;
+                    --date-count-width: 90vw;
+                    --date-count-font: Courier;
+                    --date-count-font-size: 2rem;
+                    --date-count-event-background: red;
+                    --date-count-event-color: white;
+                    --date-count-counts-background: teal;
+                    --date-count-counts-color: gold;
+                    --date-count-font-size: 3rem;
+                    --date-count-label-font-size: 1rem;
                 }
             </style>
             <pre>
 &lt;style>
-    --date-counter-width: 90vw;
-    --date-counter-font: Courier;
-    --date-counter-font-size: 2rem;
-    --date-counter-event-background: red;
-    --date-counter-event-color: white;
-    --date-counter-counters-background: teal;
-    --date-counter-counters-color: gold;
-    --date-counter-font-size: 3rem;
-    --date-counter-label-font-size: 1rem;
+    --date-count-width: 90vw;
+    --date-count-font: Courier;
+    --date-count-font-size: 2rem;
+    --date-count-event-background: red;
+    --date-count-event-color: white;
+    --date-count-counts-background: teal;
+    --date-count-counts-color: gold;
+    --date-count-font-size: 3rem;
+    --date-count-label-font-size: 1rem;
 &lt;/style>
 </pre>
-            <date-counter></date-counter>
+            <date-count></date-count>
         </section>
 
         <section id="attributes">
             <h2>Set styles with attributes (overrule global CSS properties)</h2>
-            <html-code>&lt;date-counter counters-background="blue"<br>
+            <html-code>&lt;date-count counters-background="blue"<br>
                 <spa-ces>14</spa-ces>counters-color="gold"><br>
-                &lt;/date-counter></html-code>
-            <date-counter counters-background="blue" counters-color="gold"></date-counter>
+                &lt;/date-count></html-code>
+            <date-count counters-background="blue" counters-color="gold"></date-count>
         </section>
 
         <section id="parts">
             <h2>Style shadowDOM with <code>::part(...)</code></h2>
-            <html-code>&lt;date-counter>styled with :part&lt;/date-counter></html-code>
+            <html-code>&lt;date-count>styled with :part&lt;/date-count></html-code>
             <img src="https://i.imgur.com/43FEtpm.png" />
             <style>
-                #parts date-counter::part(event) {
+                #parts date-count::part(event) {
                     background: green;
                     color: gold;
                 }
 
-                #parts date-counter::part(counters) {
+                #parts date-count::part(counters) {
                     text-shadow: 2px 2px 2px black;
                 }
 
-                #parts date-counter::part(years) {
+                #parts date-count::part(years) {
                     color: gold;
                 }
             </style>
             <pre>
 &lt;style>
-    date-counter::part(event) {
+    date-count::part(event) {
         background: green;
         color: gold;
     }
-    date-counter::part(counters) {
+    date-count::part(counters) {
         text-shadow:  2px 2px 2px black;
     }
-    date-counter::part(years) {
+    date-count::part(years) {
         color: gold;
     }
 &lt;/style>
             </pre>
-            <date-counter>styled with ::part</date-counter>
+            <date-count>styled with ::part</date-count>
         </section>
 
         <section id="filesize">
-            <h2><code class="title">&lt;date-counter></code> minified GZIP Filesize is <i>small</i></h2>
-            <file-size gz src="https://date-counter.github.io/element.min.js"></file-size>
+            <h2><code class="title">&lt;date-count></code> minified GZIP Filesize is <i>small</i></h2>
+            <file-size gz src="https://date-count.github.io/element.min.js"></file-size>
         </section>
     </main>
     <footer>

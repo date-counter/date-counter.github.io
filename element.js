@@ -1,4 +1,4 @@
-// <date-counter> custom element, displaying [years] [days] [hours] [minutes] [seconds] countdown to a date
+// <date-count> custom element, displaying [years] [days] [hours] [minutes] [seconds] countdown to a date
 // counts UP for past dates
 // attributes: date, event, count, noyears, nodays, nohours, nominutes, noseconds, locale
 // date:    date to count down to, default Y2K38 Epochalypse date Counts UP for past dates
@@ -7,12 +7,12 @@
 // noyears, nodays, nohours, nominutes, noseconds: hide labels, default show all labels
 // locale:  language to use for labels, default "en" (English)
 
-customElements.define("date-counter", class extends HTMLElement {
+customElements.define("date-count", class extends HTMLElement {
 
     // ********************************************************************
     connectedCallback() {
         // naming all my variables VAR, they are slightly faster and minify well because CSS has a "var" keyword too
-        var count = ["years", "days", "hours", "minutes", "seconds"];
+        var count = "years,days,hours,minutes,seconds".split(",");
 
         // --------------------------------------------------------------------
         // set countlabels any of ["years", "days", "hours", "minutes", "seconds"]
@@ -60,7 +60,7 @@ customElements.define("date-counter", class extends HTMLElement {
         // to read value from attribues OR CSS property OR default value
         var attr_CSSprop = (prefix, name, value) =>
             `${name}:${this.getAttribute(prefix + `-` + name) ||
-            `var(--date-counter-${prefix}-${name},${value})`};`;
+            `var(--date-count-${prefix}-${name},${value})`};`;
 
         // ********************************************************************
         // create full shadowDOM
@@ -82,12 +82,12 @@ customElements.define("date-counter", class extends HTMLElement {
                     attr_CSSprop("event", "background", "#fc0") + // gold
                     "}" +
                     // countdown counters
-                    "#counters{display:grid;grid:1fr/repeat(" + countlabels.length + ",1fr);" +
+                    "#counts{display:grid;grid:1fr/repeat(" + countlabels.length + ",1fr);" +
                     //"grid-auto-flow:row;" +
-                    attr_CSSprop("counters", "color", "#fff") + // white
-                    attr_CSSprop("counters", "font-size", "2.5rem") +
-                    attr_CSSprop("counters", "text-align", "center") +
-                    attr_CSSprop("counters", "background", "#080") + // green
+                    attr_CSSprop("counts", "color", "#fff") + // white
+                    attr_CSSprop("counts", "font-size", "2.5rem") +
+                    attr_CSSprop("counts", "text-align", "center") +
+                    attr_CSSprop("counts", "background", "#080") + // green
                     "}" +
                     // countdown labels
                     "[part*='label']{" +
@@ -107,7 +107,7 @@ customElements.define("date-counter", class extends HTMLElement {
             }),
             // --------------------------------------------------------------------
             element({
-                id: "counters",
+                id: "counts",
                 append: countlabels.map(id => element({ // id = "years", "days", "hours", "minutes", "seconds"
                     id: id + "part",
                     append: [
@@ -137,7 +137,7 @@ customElements.define("date-counter", class extends HTMLElement {
             )).every(value => !value)) {
                 // counter is down to 0, stop interval timer
                 clearInterval(count);
-                this.dispatchEvent(new CustomEvent("date-counter", { bubbles: 1, composed: 1 })); // dispatch event
+                this.dispatchEvent(new CustomEvent("date-count", { bubbles: 1, composed: 1 })); // dispatch event
             }
         }, 1e3);// ping every second
 
