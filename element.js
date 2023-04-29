@@ -27,7 +27,7 @@ customElements.define("date-counter", class extends HTMLElement {
         // get proper locale_labels for all countlabels
         var locale_labels = countlabels.map(label =>
             new Intl.RelativeTimeFormat(
-                this.getAttribute("locale") || "en", // todo: query this default from CSS property?
+                this.getAttribute("format") || "en", // todo: query this default from CSS property?
                 //{ numeric: "auto" }
             ).formatToParts(
                 2, // 2 for plural, 1 for singular
@@ -40,20 +40,20 @@ customElements.define("date-counter", class extends HTMLElement {
         // generic function to create a HTML element with all content and properties
         // this[id] optimized for use in this Custom Element
         var element = ({
-            tag = "div", // default element is a <div>
+            create = "div", // default element is a <div>
             id,// 
             append = [],// append array of child elements 
-            ...props // all remaing props
+            ...p // all remaing props
         }) => (
             // I hate "return" statements they only take up bytes (x,y,z,return value) does the job
 
             // every id must be unique! and becomes a this. reference
-            this[id] = Object.assign( // my favorite JS function
-                document.createElement(tag), // create a DOM element
-                { id, ...props } // set ALL properties
+            this[id] = Object.assign( // Object.assign is my favorite JS function
+                document.createElement(create), // create a DOM element
+                { id, part: id, ...p } // set ALL properties, eventhandlers etc.
             ),
             this[id].append(...append), // append all child elements
-            this[this[id].part = id] // merged 2 JS lines into one for shorter code
+            /* Return value: */ this[id]
         );
         // ********************************************************************
         // generic function setting CSS selector
@@ -67,7 +67,7 @@ customElements.define("date-counter", class extends HTMLElement {
         this.attachShadow({ mode: "open" }).append(
             // ----------------------------------------------------------------
             element({
-                tag: "style",
+                create: "style",
                 //id: "style", // prevent from setting default "undefined" string value
                 innerHTML: ":host{display:inline-block;" +
                     attr_CSSprop("", "font", "arial") +
@@ -102,14 +102,14 @@ customElements.define("date-counter", class extends HTMLElement {
                 //innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>",
                 // using append creates a 3 bytes smaller GZip file
                 append: [
-                    element({ tag: "slot", innerHTML: this.getAttribute("event") || "Y2K38 Epochalypse" })
+                    element({ create: "slot", innerHTML: this.getAttribute("event") || "Y2K38 Epochalypse" })
                 ]
             }),
             // --------------------------------------------------------------------
             element({
                 id: "counters",
                 append: countlabels.map(id => element({ // id = "years", "days", "hours", "minutes", "seconds"
-                    id: id + "date",
+                    id: id + "part",
                     append: [
                         element({
                             id
