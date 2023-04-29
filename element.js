@@ -126,7 +126,7 @@ customElements.define("date-count", class extends HTMLElement {
         // main interval timer
         // Hey! Its JavaScript! Reusing count variable, so we don't have to declare a new one! Now for a timer function
         count = setInterval(() => {
-            var datedifference = this.counter(new Date(this.getAttribute("date") || "2038-01-19 03:14:07"));
+            var datedifference = this.counts(new Date(this.getAttribute("date") || "2038-01-19 03:14:07"));
             if (countlabels.map(label =>
             (
                 this.setAttribute(label, datedifference[label]),
@@ -146,7 +146,7 @@ customElements.define("date-count", class extends HTMLElement {
     // ********************************************************************
     // keeping as separate methode for easy reuse in other projects
     // could be included in this connectedCallback setInterval for a smaller file
-    counter(date, start = new Date(), future = new Date(date)) {
+    counts(date, start = new Date(), future = new Date(date)) {
         var since = future < start && ([start, future] = [future, start]);
         var diff = future - start;
         var day = 864e5;
