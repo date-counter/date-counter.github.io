@@ -10,14 +10,6 @@
 customElements.define("date-counter", class extends HTMLElement {
 
     // ********************************************************************
-    // leaving date as Getters, although used once
-    // this allows OOP derived components to overload:
-    // customElements.define("my-counter") extends customElements.get("date-counter") { }
-    get date() {
-        // get date from attribute or default Y2K38 Epochalypse date
-        return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
-    }
-    // ********************************************************************
     connectedCallback() {
         // naming all my variables VAR, they are slightly faster and minify well because CSS has a "var" keyword too
         var count = ["years", "days", "hours", "minutes", "seconds"];
@@ -102,7 +94,7 @@ customElements.define("date-counter", class extends HTMLElement {
             }),
             element({
                 id: "event",
-                innerHTML: "<slot>" + this.getAttribute("event") || "Y2K38 Epochalypse" + "</slot>"
+                innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>"
             }),
             element({
                 id: "counters",
@@ -128,13 +120,29 @@ customElements.define("date-counter", class extends HTMLElement {
         // main interval timer
         var timer = setInterval(() => {
             var datedifference = this.Interval(this.date);
-            countlabels.map(label => (this["_" + label] == datedifference[label])
-                ? 0
-                : this[label].innerHTML = (this["_" + label] = datedifference[label])); // update counter
-            if (countlabels.every(label => datedifference[label] == 0)) clearInterval(timer);
+            if (countlabels.map(label =>
+                // update every counter
+                this[label].innerHTML = datedifference[label]
+                // OR minimal DOM updates; update only counters that are not 0 OR the same value as before
+                //(this["_" + label] == datedifference[label]) && (this[label].innerHTML = (this["_" + label] = datedifference[label]))
+            ).every(value => !value)) {
+                clearInterval(timer);
+                this.remove();
+            }
         }, 1e3);
 
     } // connectedCallback
+
+    // ********************************************************************
+    // leaving date as Getters, although used once
+    // this allows OOP derived components to overload:
+    // customElements.define("my-counter") extends customElements.get("date-counter") { }
+    get date() {
+        // get date from attribute or default Y2K38 Epochalypse date
+        //return new Date(new Date()/1 +200000);
+        return new Date("2023-04-29 12:42:30");
+        return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
+    }
 
     // keeping as separate methode for easy reuse in other projects
     // could be included in this connectedCallback for a smaller file
