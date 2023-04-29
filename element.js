@@ -24,8 +24,8 @@ customElements.define("date-counter", class extends HTMLElement {
             || count.filter(label => !this.hasAttribute("no" + label));
 
         // --------------------------------------------------------------------
-        // init labels to be shown // get proper language names for all counting labels
-        var locale_labels = count.map(label =>
+        // get proper locale_labels for all countlabels
+        var locale_labels = countlabels.map(label =>
             new Intl.RelativeTimeFormat(
                 this.getAttribute("locale") || "en", // todo: query this default from CSS property?
                 //{ numeric: "auto" }
@@ -34,7 +34,7 @@ customElements.define("date-counter", class extends HTMLElement {
                 label // label in "years,days,hours,minutes,seconds"
             )[2] // get time label name in locale as Object
                 .value // get time name in locale as String
-        ).filter((label, idx) => countlabels.includes(count[idx])); // exclude labels not in countlabels
+        );
 
         // ********************************************************************
         // generic function to create a HTML element with all content and properties
@@ -100,6 +100,7 @@ customElements.define("date-counter", class extends HTMLElement {
             element({
                 id: "event",
                 //innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>",
+                // using append creates a 3 bytes smaller GZip file
                 append: [
                     element({ tag: "slot", innerHTML: this.getAttribute("event") || "Y2K38 Epochalypse" })
                 ]
@@ -112,7 +113,7 @@ customElements.define("date-counter", class extends HTMLElement {
                     append: [
                         element({
                             id
-                            //, innerHTML: "#" // saving some bytes, after a second sthe value will be set
+                            //, innerHTML: "#" // saving some bytes, after a second the value will be set
                         }),
                         element({
                             id: id + "label",
@@ -138,7 +139,7 @@ customElements.define("date-counter", class extends HTMLElement {
                 clearInterval(count);
                 this.dispatchEvent(new CustomEvent("date-counter", { bubbles: 1, composed: 1 })); // dispatch event
             }
-        }, 1e3);
+        }, 1e3);// ping every second
 
     } // connectedCallback
 
