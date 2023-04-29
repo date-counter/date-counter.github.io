@@ -74,8 +74,12 @@
     </style>
     <script src="./element.js"></script>
     <script src="https://file-size.github.io/element.js"></script>
-
     <script>
+        customElements.define("spa-ces", class extends HTMLElement {
+            connectedCallback() {
+                setTimeout(() => this.innerHTML = "&nbsp;".repeat(this.innerHTML || 0));
+            }
+        })
         customElements.define("header-and-footer", class extends HTMLElement {
             connectedCallback() {
                 this.append(document.querySelector("#HEADER-AND-FOOTER").content.cloneNode(true));
@@ -104,7 +108,10 @@
                 less functionality and more code)</a>
         </p> -->
         <p>
-            I promote writing you own Web Components using native technology. <a href="https://github.com/date-counter/date-counter.github.io/blob/main/element.js">The single file sourcecode of this &lt;date-counter> Web Component</a> has the UNlicensed license; meaning you can copy and re-use whatever you want from it, without giving any attribution.</a>
+            I promote writing you own Web Components using native technology. <a
+                href="https://github.com/date-counter/date-counter.github.io/blob/main/element.js">The single file
+                sourcecode of this &lt;date-counter> Web Component</a> has the UNlicensed license; meaning you can copy
+            and re-use whatever you want from it, without giving any attribution.</a>
         </p>
 
         <h1>Load the &lt;date-counter> Web Component:</h1>
@@ -132,23 +139,27 @@
         </section>
         <section id="newyeardays">
             <h2>set custom date, only display days counter and format font-size</h2>
-            <html-code>&lt;date-counter date="2024-1-1" count="days"<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters-font-size="6rem">🎆
+            <html-code>&lt;date-counter date="2024-1-1"<br>
+                <spa-ces>14</spa-ces>count="days"<br>
+                <spa-ces>14</spa-ces>counters-font-size="6rem">🎆
                 New Year! 🍾<br>&lt;/date-counter></html-code>
             <date-counter noyears nohours nominutes noseconds date="2024-1-1" counters-font-size="6rem">🎆 New Year!
                 🍾</date-counter>
         </section>
         <section id="since">
             <h2>Count <b>up</b> from a past date</h2>
-            <html-code>&lt;date-counter date="1969-1-21" event="my age"
-                count="years,days,hours"><br>&lt;/date-counter></html-code>
+            <html-code>&lt;date-counter date="1969-1-21"<br>
+                <spa-ces>14</spa-ces>event="my age"<br>
+                <spa-ces>14</spa-ces>count="years,days,hours"><br>&lt;/date-counter></html-code>
             <date-counter date="1969-1-21" event="my age" count="years,days,hours"></date-counter>
         </section>
         <section id="language">
             <h2>Set the labels to any language</h2>
             <html-code>&lt;date-counter locale="es"><br>&nbsp;Y2K38 in Spanish<br>&lt;/date-counter></html-code>
             <date-counter locale="es">Y2K38 in Spanish</date-counter>
-            <html-code>&lt;date-counter locale="nl" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count="years,days"><br>&nbsp;Y2K38 in Dutch<br>&lt;/date-counter></html-code>
+            <html-code>&lt;date-counter locale="nl"<br>
+                <spa-ces>14</spa-ces>count="years,days"><br>&nbsp;Y2K38
+                in Dutch<br>&lt;/date-counter></html-code>
             <date-counter count="years,days" locale="nl">Y2K38 in Dutch</date-counter>
         </section>
         <section id="CSS">
@@ -184,8 +195,9 @@
 
         <section id="attributes">
             <h2>Set styles with attributes (overrule global CSS properties)</h2>
-            <html-code>&lt;date-counter counters-background="blue"
-                counters-color="gold"><br>&lt;/date-counter></html-code>
+            <html-code>&lt;date-counter counters-background="blue"<br>
+                <spa-ces>14</spa-ces>counters-color="gold"><br>
+                &lt;/date-counter></html-code>
             <date-counter counters-background="blue" counters-color="gold"></date-counter>
         </section>
 

@@ -10,17 +10,12 @@
 customElements.define("date-counter", class extends HTMLElement {
 
     // ********************************************************************
-    // leaving date and eventname as Getters, although they are used once
-    // this allows OOP derived components to override them:
+    // leaving date as Getters, although used once
+    // this allows OOP derived components to overload:
     // customElements.define("my-counter") extends customElements.get("date-counter") { }
     get date() {
         // get date from attribute or default Y2K38 Epochalypse date
         return new Date(this.getAttribute("date") || "2038-01-19 03:14:07");
-    }
-    get eventname() {
-        // get event name from attribute or default Y2K38 Epochalypse name
-        // if HTML is defined in lightDOM that will be used instead of this default
-        return this.getAttribute("event") || "Y2K38 Epochalypse";
     }
     // ********************************************************************
     connectedCallback() {
@@ -72,43 +67,42 @@ customElements.define("date-counter", class extends HTMLElement {
             `var(--date-counter-${prefix}-${name},${value})`};`;
 
         // ********************************************************************
-        // declare here to prevent needing let inside code below
-        var timer, datedifference;
-
-        // ********************************************************************
         // create full shadowDOM
         this.attachShadow({ mode: "open" }).append(
             // ----------------------------------------------------------------
             element({
                 tag: "style",
                 //id: "style", // prevent from setting default "undefined" string value
-                innerHTML: `:host{display:inline-block;` +
+                innerHTML: ":host{display:inline-block;" +
                     attr_CSSprop("", "font", "arial") +
                     attr_CSSprop("", "width", "", countlabels.length * 5 + "rem") +
-                    `}` +
-                    `#event{` +
+                    "}" +
+                    // eventname
+                    "#event{" +
                     attr_CSSprop("event", "padding", "0 1rem") +
                     attr_CSSprop("event", "background", "gold") +
                     attr_CSSprop("event", "color", "black") +
                     attr_CSSprop("event", "text-align", "center") +
                     attr_CSSprop("event", "font-size", "2.5rem") +
-                    `}` +
-                    `#counters{display:grid;grid:1fr/repeat(${countlabels.length},1fr);` +
-                    //`grid-auto-flow:row;` +
+                    "}" +
+                    // countdown counters
+                    "#counters{display:grid;grid:1fr/repeat(" + countlabels.length + ",1fr);" +
+                    //"grid-auto-flow:row;" +
                     attr_CSSprop("counters", "background", "green") +
                     attr_CSSprop("counters", "color", "white") +
                     attr_CSSprop("counters", "text-align", "center") +
                     attr_CSSprop("counters", "font-size", "2.5rem") +
-                    `}` +
-                    `[part*="label"]{` +
+                    "}" +
+                    // countdown labels
+                    "[part*='label']{" +
                     attr_CSSprop("label", "padding", "0 1rem") +
-                    attr_CSSprop("label", "font-size", ".5em") +
+                    attr_CSSprop("label", "font-size", "50%") +
                     attr_CSSprop("label", "text-transform", "uppercase") +
-                    `}`
+                    "}"
             }),
             element({
                 id: "event",
-                innerHTML: `<slot>${this.eventname}</slot>`
+                innerHTML: "<slot>" + this.getAttribute("event") || "Y2K38 Epochalypse" + "</slot>"
             }),
             element({
                 id: "counters",
@@ -132,8 +126,8 @@ customElements.define("date-counter", class extends HTMLElement {
 
         // ----------------------------------------------------------------
         // main interval timer
-        timer = setInterval(() => {
-            datedifference = this.Interval(this.date);
+        var timer = setInterval(() => {
+            var datedifference = this.Interval(this.date);
             countlabels.map(label => (this["_" + label] == datedifference[label])
                 ? 0
                 : this[label].innerHTML = (this["_" + label] = datedifference[label])); // update counter
