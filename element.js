@@ -14,7 +14,8 @@ customElements.define("date-counter", class extends HTMLElement {
         // naming all my variables VAR, they are slightly faster and minify well because CSS has a "var" keyword too
         var count = ["years", "days", "hours", "minutes", "seconds"];
 
-        // set countlabels any of years,days,hours,minutes,seconds
+        // --------------------------------------------------------------------
+        // set countlabels any of ["years", "days", "hours", "minutes", "seconds"]
         var countlabels =
             // user defined "years,days"string from attribute "count" 
             this.getAttribute("count")?.split(",")
@@ -22,15 +23,18 @@ customElements.define("date-counter", class extends HTMLElement {
             // and filter away user defined "noyears" ... "noseconds" attributes
             || count.filter(label => !this.hasAttribute("no" + label));
 
-        // init labels to be shown
-        var locale_labels =
-            // get proper language names for all counting labels
-            count.map(
-                label => new Intl.RelativeTimeFormat(
-                    this.getAttribute("locale") || "en",
-                    //{ numeric: "auto" }
-                ).formatToParts(10, label)[2].value.trim()
-            );
+        // --------------------------------------------------------------------
+        // init labels to be shown // get proper language names for all counting labels
+        var locale_labels = count.map(label =>
+            new Intl.RelativeTimeFormat(
+                this.getAttribute("locale") || "en", // todo: query this default from CSS property?
+                //{ numeric: "auto" }
+            ).formatToParts(
+                2, // 2 for plural, 1 for singular
+                label // label in "years,days,hours,minutes,seconds"
+            )[2] // get time label name in locale as Object
+                .value // get time name in locale as String
+        ).filter((label, idx) => countlabels.includes(count[idx])); // exclude labels not in countlabels
 
         // ********************************************************************
         // generic function to create a HTML element with all content and properties
@@ -71,19 +75,19 @@ customElements.define("date-counter", class extends HTMLElement {
                     "}" +
                     // eventname
                     "#event{" +
+                    attr_CSSprop("event", "color", "#000") + // black
                     attr_CSSprop("event", "padding", "0 1rem") +
-                    attr_CSSprop("event", "background", "gold") +
-                    attr_CSSprop("event", "color", "black") +
-                    attr_CSSprop("event", "text-align", "center") +
                     attr_CSSprop("event", "font-size", "2.5rem") +
+                    attr_CSSprop("event", "text-align", "center") +
+                    attr_CSSprop("event", "background", "#fc0") + // gold
                     "}" +
                     // countdown counters
                     "#counters{display:grid;grid:1fr/repeat(" + countlabels.length + ",1fr);" +
                     //"grid-auto-flow:row;" +
-                    attr_CSSprop("counters", "background", "green") +
-                    attr_CSSprop("counters", "color", "white") +
-                    attr_CSSprop("counters", "text-align", "center") +
+                    attr_CSSprop("counters", "color", "#fff") + // white
                     attr_CSSprop("counters", "font-size", "2.5rem") +
+                    attr_CSSprop("counters", "text-align", "center") +
+                    attr_CSSprop("counters", "background", "#080") + // green
                     "}" +
                     // countdown labels
                     "[part*='label']{" +
@@ -92,50 +96,53 @@ customElements.define("date-counter", class extends HTMLElement {
                     attr_CSSprop("label", "text-transform", "uppercase") +
                     "}"
             }),
+            // --------------------------------------------------------------------
             element({
                 id: "event",
                 innerHTML: "<slot>" + (this.getAttribute("event") || "Y2K38 Epochalypse") + "</slot>"
             }),
+            // --------------------------------------------------------------------
             element({
                 id: "counters",
-                append: countlabels.map(id => element({
+                append: countlabels.map(id => element({ // id = "years", "days", "hours", "minutes", "seconds"
                     id: id + "date",
                     append: [
-                        element({ id, innerHTML: "0" }), // "days", "hours", "minutes", "seconds"
+                        element({
+                            id
+                            //, innerHTML: "#" // saving some bytes, after a second sthe value will be set
+                        }),
                         element({
                             id: id + "label",
-                            innerHTML: (
-                                // shorten the default years,days,hours,minutes,seconds to the number of user-defined labels
-                                count.reduce((acc, label, idx) => (// (X,acc) notation for shorter code
-                                    countlabels.includes(label) && acc.push(locale_labels[idx]),
-                                    acc // return accumulator
-                                ), [])
-                                // now from shorted array of labels, get the label for this id
-                                [countlabels.indexOf(id)] || "")
+                            innerHTML: locale_labels[countlabels.indexOf(id)]
                         })]
                 }))
             }))// shadowDOM created
 
         // ----------------------------------------------------------------
         // main interval timer
-
         // Hey! Its JavaScript! Reusing count variable, so we don't have to declare a new one! Now for a timer function
         count = setInterval(() => {
-            if (countlabels.map(label => // update every counter in the DOM element this[label]
-                this[label].innerHTML = (this.Interval(new Date(this.getAttribute("date") || "2038-01-19 03:14:07")))[label]
+            var datedifference = this.counter(new Date(this.getAttribute("date") || "2038-01-19 03:14:07"));
+            if (countlabels.map(label =>
+            (
+                this.setAttribute(label, datedifference[label]),
+                // update every counter in the DOM element this[label]
+                /*.map RETURN value: */ this[label].innerHTML = datedifference[label]
                 // OR minimal DOM updates; update only counters that are not 0 OR the same value as before
                 //(this["_" + label] == datedifference[label]) && (this[label].innerHTML = (this["_" + label] = datedifference[label]))
-            ).every(value => !value)) {
+            )).every(value => !value)) {
+                // counter is down to 0, stop interval timer
                 clearInterval(count);
-                this.setAttribute("ended", "ended");
+                this.dispatchEvent(new CustomEvent("date-counter", { bubbles: 1, composed: 1 })); // dispatch event
             }
         }, 1e3);
 
     } // connectedCallback
 
+    // ********************************************************************
     // keeping as separate methode for easy reuse in other projects
-    // could be included in this connectedCallback for a smaller file
-    Interval(date, start = new Date(), future = new Date(date)) {
+    // could be included in this connectedCallback setInterval for a smaller file
+    counter(date, start = new Date(), future = new Date(date)) {
         var since = future < start && ([start, future] = [future, start]);
         var diff = future - start;
         var day = 864e5;
