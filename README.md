@@ -1,2 +1,1 @@
-# date-counter.github.io
-&lt;date-counter> Web Component
+# https://github.com/event-count/event-count.github.io
